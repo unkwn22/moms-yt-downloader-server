@@ -1,0 +1,21 @@
+spring:
+  sql:
+    init:
+      mode: always
+  jpa:
+    properties:
+      hibernate:
+        show-sql: true
+        format_sql: true
+    hibernate:
+      ddl-auto: ${DDL_SET}
+#    database-platform: CustomMariaDbDialect
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 70MB
+  datasource:
+    url: ${DEV_DB_URL}
+    username: ${DEV_DB_USER}
+    password: ${DEV_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
