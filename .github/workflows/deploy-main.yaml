@@ -19,12 +19,11 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - uses: appleboy/ssh-action@v0.1.4
+      - uses: fifsky/ssh-action@master
         with:
           host: ${{ secrets.EC2_IP }}
-          username: ${{ secrets.EC2_USER }}
+          user: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
-          port: ${{ secrets.EC2_PORT }}
           script: |
             cd /home/ubuntu
             sudo ./deployauto.sh
