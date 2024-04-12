@@ -1,0 +1,54 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Deploy-main
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions: write-all
+
+jobs:
+  main-merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.REMOTE_IP }} # 인스턴스 IP
+          username: ${{ secrets.REMOTE_USER }} # 우분투 아이디
+          key: ${{ secrets.REMOTE_PRIVATE_KEY }} # ec2 instance pem key
+          port: ${{ secrets.REMOTE_SSH_PORT }} # 접속포트
+          script: | # 실행할 스크립트
+            cd /home/ubuntu
+            sudo ./deployauto.sh
+
+#      - name: Set appspec.yml
+#        run: sudo cp main-appspec.yml appspec.yml
+#
+#      - name: Make appspec.yml executable
+#        run: sudo chmod +x appspec.yml
+#
+#      - name: Make Dockerfile
+#        run: sudo cp DockerFile-prod Dockerfile
+#
+#      - name: Make Dockerfile executable
+#        run: sudo chmod +x Dockerfile
+
+#      - name: Copy docker health checker
+#        run: sudo cp docker-health-checker-prod.sh docker-health-checker.sh
+#
+#      - name: Make docker health checker runnable
+#        run: sudo chmod 777 docker-health-checker.sh
+
+#      - name: Copy docker container logs init script
+#        run: sudo cp docker-log-init-prod.sh docker-log-init.sh
+#
+#      - name: Make logs init script runnable
+#        run: sudo chmod 777 docker-log-init.sh
