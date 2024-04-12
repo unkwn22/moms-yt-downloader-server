@@ -19,7 +19,7 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - uses: appleboy/ssh-action@v0.1.6
+      - uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.EC2_IP }}
           username: ${{ secrets.EC2_USER }}
