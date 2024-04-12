@@ -25,6 +25,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_PORT }}
+          passphrase: ${{ secrets.EC2_PASSPHRASE }}
           script: |
             cd /home/ubuntu
             sudo ./deployauto.sh
