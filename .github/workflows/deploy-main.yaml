@@ -29,27 +29,3 @@ jobs:
           script: |
             cd /home/ubuntu
             sudo ./deployauto.sh
-
-#      - name: Set appspec.yml
-#        run: sudo cp main-appspec.yml appspec.yml
-#
-#      - name: Make appspec.yml executable
-#        run: sudo chmod +x appspec.yml
-#
-#      - name: Make Dockerfile
-#        run: sudo cp DockerFile-prod Dockerfile
-#
-#      - name: Make Dockerfile executable
-#        run: sudo chmod +x Dockerfile
-
-#      - name: Copy docker health checker
-#        run: sudo cp docker-health-checker-prod.sh docker-health-checker.sh
-#
-#      - name: Make docker health checker runnable
-#        run: sudo chmod 777 docker-health-checker.sh
-
-#      - name: Copy docker container logs init script
-#        run: sudo cp docker-log-init-prod.sh docker-log-init.sh
-#
-#      - name: Make logs init script runnable
-#        run: sudo chmod 777 docker-log-init.sh
