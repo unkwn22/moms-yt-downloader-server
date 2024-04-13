@@ -54,7 +54,7 @@ public class SecurityConfig {
         http.headers(headers -> headers.xssProtection(HeadersConfigurer.XXssConfig::disable));
 
         http.authorizeHttpRequests(authorize ->
-            authorize.requestMatchers("/api/search").hasRole("MEMBER").anyRequest().permitAll()
+            authorize.requestMatchers("/api/search", "/api/download").hasRole("MEMBER").anyRequest().permitAll()
         );
 
         return http.build();

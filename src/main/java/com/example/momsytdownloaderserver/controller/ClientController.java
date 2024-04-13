@@ -2,9 +2,12 @@ package com.example.momsytdownloaderserver.controller;
 
 import com.example.momsytdownloaderserver.dto.LoginDto;
 import com.example.momsytdownloaderserver.dto.RegisterDto;
+import com.example.momsytdownloaderserver.entity.RequestEntityCommand;
 import com.example.momsytdownloaderserver.exception.CommonResponse;
 import com.example.momsytdownloaderserver.exception.CommonResult;
 import com.example.momsytdownloaderserver.repository.YouTubeSearchResponse;
+import com.example.momsytdownloaderserver.service.DownloadService;
+import com.example.momsytdownloaderserver.service.RequestService;
 import com.example.momsytdownloaderserver.service.SearchService;
 import com.example.momsytdownloaderserver.service.UserService;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -16,10 +19,19 @@ public class ClientController {
 
     private final UserService userService;
     private final SearchService searchService;
+    private final DownloadService downloadService;
+    private final RequestService requestService;
 
-    public ClientController(UserService userService, SearchService searchService) {
+    public ClientController(
+        UserService userService,
+        SearchService searchService,
+        DownloadService downloadService,
+        RequestService requestService
+    ) {
         this.userService = userService;
         this.searchService = searchService;
+        this.downloadService = downloadService;
+        this.requestService = requestService;
     }
 
     @PostMapping("/register")
@@ -40,5 +52,16 @@ public class ClientController {
         @RequestParam(required = false) String pageToken
     ) {
         return CommonResponse.success(searchService.search(query, pageToken), "조회 성공");
+    }
+
+    @GetMapping("/download")
+    public void downloadVideo(
+        Authentication authentication,
+        @RequestParam String videoId,
+        @RequestParam String originalTitle,
+        @RequestParam(required = false) String requestTitle
+    ) {
+        RequestEntityCommand entityCommand = requestService.saveRequest(originalTitle, requestTitle);
+        downloadService.ytDownloadLogic(videoId, entityCommand);
     }
 }
