@@ -36,7 +36,7 @@ public class User {
     protected String username;
 
     @Column(name = "authorize_status", nullable = false, updatable = true)
-    protected String authorizeStatus;
+    protected int authorizeStatus = 0;
 
     @Column(name = "created_dt", nullable = false, updatable = false)
     protected LocalDateTime createdDt = DateUtil.getCurrentDateTime();
@@ -68,7 +68,7 @@ public class User {
         this.username = username;
     }
 
-    public String getAuthorizeStatus() {
+    public int getAuthorizeStatus() {
         return authorizeStatus;
     }
 
