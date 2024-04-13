@@ -17,13 +17,11 @@ public class UserInteractionImpl implements UserInteraction {
 
     @Override
     public User saveUser(User user) {
-        return userRepository.saveUser(user);
+        return userRepository.save(user);
     }
 
     @Override
-    public User findUserByUserNameAndName(String userName, String name) {
-        Optional<User> optionalUser = userRepository.findByUsernameAndName(userName, name);
-        if(optionalUser.isEmpty()) throw new RuntimeException("User not found");
-        return optionalUser.get();
+    public Optional<User> findUserByUserNameAndName(String userName, String name) {
+        return userRepository.findByUsernameAndName(userName, name);
     }
 }
