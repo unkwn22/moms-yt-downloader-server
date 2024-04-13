@@ -21,7 +21,12 @@ public class UserInteractionImpl implements UserInteraction {
     }
 
     @Override
-    public Optional<User> findUserByUserNameAndName(String userName, String name) {
-        return userRepository.findByUsernameAndName(userName, name);
+    public Optional<User> findUserByUserNameAndName(String username, String name) {
+        return userRepository.findByUsernameAndName(username, name);
+    }
+
+    @Override
+    public Optional<User> findByUserName(String username) {
+        return userRepository.findByUsername(username);
     }
 }

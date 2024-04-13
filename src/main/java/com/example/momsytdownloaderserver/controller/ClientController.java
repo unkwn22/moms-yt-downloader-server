@@ -1,5 +1,6 @@
 package com.example.momsytdownloaderserver.controller;
 
+import com.example.momsytdownloaderserver.dto.LoginDto;
 import com.example.momsytdownloaderserver.dto.RegisterDto;
 import com.example.momsytdownloaderserver.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,5 +22,12 @@ public class ClientController {
     public String userRegister(@RequestBody RegisterDto dto) {
         userService.registerUserLogic(dto);
         return "회원가입 성공";
+    }
+
+    @PostMapping("/login")
+    public String userLogin(@RequestBody LoginDto loginDto) {
+        userService.loginUserLogic(loginDto);
+        // TODO
+        return "";
     }
 }
