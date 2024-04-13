@@ -18,7 +18,7 @@ public class CustomAccessDeniedHandler implements org.springframework.security.w
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json; charset=UTF-8");
-        CommonResult<String> exceptionResponse = CommonResponse.fail(ErrorCode.FOURXXCODE, ErrorCode.FOURXXCODE.getErrorMessage());
+        CommonResult<String> exceptionResponse = CommonResponse.fail(ErrorCode.UNAUTHORIZED, ErrorCode.UNAUTHORIZED.getErrorMessage());
         response.getWriter().write(new Gson().toJson(exceptionResponse));
     }
 }
