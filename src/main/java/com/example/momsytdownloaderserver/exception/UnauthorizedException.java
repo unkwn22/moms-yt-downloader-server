@@ -9,11 +9,6 @@ public class UnauthorizedException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public UnauthorizedException(ErrorCode errorCode, String message) {
-        super(message);
-        this.errorCode = errorCode;
-    }
-
     public ErrorCode getErrorCode() {
         return errorCode;
     }

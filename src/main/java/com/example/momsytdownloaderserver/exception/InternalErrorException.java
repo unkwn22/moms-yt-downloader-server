@@ -9,11 +9,6 @@ public class InternalErrorException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public InternalErrorException(ErrorCode errorCode, String message) {
-        super(message);
-        this.errorCode = errorCode;
-    }
-
     public ErrorCode getErrorCode() {
         return errorCode;
     }
