@@ -28,6 +28,9 @@ dependencies {
 
 	// Gson
 	implementation("com.google.code.gson:gson:2.8.9")
+
+	// Feign
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.0.3")
 }
 
 tasks.withType<Test> {

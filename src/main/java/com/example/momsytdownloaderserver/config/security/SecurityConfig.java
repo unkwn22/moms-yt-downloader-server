@@ -53,10 +53,9 @@ public class SecurityConfig {
         http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         http.headers(headers -> headers.xssProtection(HeadersConfigurer.XXssConfig::disable));
 
-        // TODO add apis
-//        http.authorizeHttpRequests(authorize ->
-//            authorize.requestMatchers("", "").hasRole("MEMBER").anyRequest().permitAll()
-//        );
+        http.authorizeHttpRequests(authorize ->
+            authorize.requestMatchers("/api/search").hasRole("MEMBER").anyRequest().permitAll()
+        );
 
         return http.build();
     }
