@@ -1,7 +1,7 @@
 package com.example.momsytdownloaderserver.service;
 
-import com.example.momsytdownloaderserver.exception.BadRequestException;
 import com.example.momsytdownloaderserver.exception.ErrorCode;
+import com.example.momsytdownloaderserver.exception.InternalErrorException;
 import com.example.momsytdownloaderserver.repository.GoogleFeign;
 import com.example.momsytdownloaderserver.repository.YouTubeSearchResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +31,7 @@ public class SearchService {
                     pageToken
             );
         } catch (Exception e) {
-            throw new BadRequestException(ErrorCode.FOURXXCODE, e.getMessage());
+            throw new InternalErrorException(ErrorCode.INTERNAL);
         }
     }
 }

@@ -22,11 +22,11 @@ public class JwtTokenValidation {
             Jwt jwt = jwtDecoder.decode(token);
             return jwt.getClaimAsString("username");
         } catch(JwtValidationException e) {
-            throw new UnauthorizedException(ErrorCode.FOURXXCODE, "토큰 기간이 지났습니다.");
+            throw new UnauthorizedException(ErrorCode.JWT_EXPIRED);
         } catch(BadJwtException e) {
-            throw new UnauthorizedException(ErrorCode.FOURXXCODE, "변조된 토큰입니다.");
+            throw new UnauthorizedException(ErrorCode.JWT_CORRUPT);
         } catch(NullPointerException e) {
-            throw new UnauthorizedException(ErrorCode.FOURXXCODE, "권한이 없는 토큰입니다.");
+            throw new UnauthorizedException(ErrorCode.UNAUTHORIZED);
         }
     }
 }

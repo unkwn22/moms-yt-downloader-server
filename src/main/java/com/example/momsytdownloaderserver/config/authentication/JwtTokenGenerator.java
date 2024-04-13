@@ -44,7 +44,9 @@ public class JwtTokenGenerator {
     public User validateTokenAndFindUser(String token) {
         String username = jwtTokenValidation.validateAndDecodeToken(token);
         Optional<User> searchedUser = userInteraction.findByUserName(username);
-        if(searchedUser.isEmpty()) throw new UnauthorizedException(ErrorCode.FOURXXCODE, "회원을 찾지 못했습니다.");
-        return searchedUser.get();
+        if(searchedUser.isEmpty()) throw new UnauthorizedException(ErrorCode.UNAUTHORIZED);
+        User foundUser = searchedUser.get();
+        if(foundUser.getAuthorizeStatus() == 0) throw new UnauthorizedException(ErrorCode.UNAUTHORIZED);
+        return foundUser;
     }
 }
