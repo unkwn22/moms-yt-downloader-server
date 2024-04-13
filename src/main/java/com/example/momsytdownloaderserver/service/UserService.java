@@ -38,7 +38,7 @@ public class UserService {
             throw new NotFoundException(ErrorCode.CANNOT_FIND);
         }
         User foundUser = searchUser.get();
-        if(foundUser.getAuthorizeStatus() == 0) throw new UnauthorizedException(ErrorCode.FOURXXCODE, "허용되지 않는 회원입니다.");
+        if(foundUser.getAuthorizeStatus() == 0) throw new UnauthorizedException(ErrorCode.UNAUTHORIZED);
         return jwtTokenGenerator.createToken(searchUser.get());
     }
 }
