@@ -35,6 +35,8 @@ public class UserService {
         if(!dto.getPassword().equals(searchUser.get().getPassword())) {
             throw new UnauthorizedException(ErrorCode.FOURXXCODE, "회원을 찾지 못했습니다.");
         }
+        User foundUser = searchUser.get();
+        if(foundUser.getAuthorizeStatus() == 0) throw new UnauthorizedException(ErrorCode.FOURXXCODE, "허용되지 않는 회원입니다.");
         return jwtTokenGenerator.createToken(searchUser.get());
     }
 }
