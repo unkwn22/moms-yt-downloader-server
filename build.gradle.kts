@@ -31,6 +31,9 @@ dependencies {
 
 	// Feign
 	implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.0.3")
+
+	// Amazon
+	implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
 }
 
 tasks.withType<Test> {

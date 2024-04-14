@@ -10,6 +10,7 @@ import com.example.momsytdownloaderserver.exception.ErrorCode;
 import com.example.momsytdownloaderserver.exception.NotFoundException;
 import com.example.momsytdownloaderserver.exception.UnauthorizedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ public class UserService {
         this.jwtTokenGenerator = jwtTokenGenerator;
     }
 
+    @Transactional
     public void registerUserLogic(RegisterDto dto) {
         Optional<User> searchedUser = userInteraction.findUserByUserNameAndName(dto.getUsername(), dto.getName());
         if(searchedUser.isPresent()) throw new BadRequestException(ErrorCode.EXISTS);
@@ -31,6 +33,7 @@ public class UserService {
         userInteraction.saveUser(beforeRegisterUserEntity);
     }
 
+    @Transactional(readOnly = true)
     public String loginUserLogic(LoginDto dto) {
         Optional<User> searchUser = userInteraction.findByUserName(dto.getUsername());
         if(searchUser.isEmpty()) throw new NotFoundException(ErrorCode.CANNOT_FIND);
