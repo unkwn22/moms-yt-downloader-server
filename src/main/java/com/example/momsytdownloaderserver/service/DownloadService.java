@@ -27,25 +27,25 @@ public class DownloadService  {
     public String ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
         String initialCommandBuilder = "sudo yt-dlp " +
             "-o "  + entityCommand.id() + ".mp3 " +
-            "-P ~/moms-yt-downloader-server/download" +
+            "-P ~/moms-yt-downloader-server/download " +
             "-x --audio-format mp3 " +
             "https://www.youtube.com/watch?v=" + videoId;
         shellBashUtil.runtime(initialCommandBuilder);
         String changeFilename = entityCommand.originalTitle();
         if(!entityCommand.requestedTitle().isBlank() && !entityCommand.requestedTitle().isEmpty()) changeFilename = entityCommand.requestedTitle();
 
-        String copyFileChangeNameCommand = "sudo cp " +
-            "/home/ubuntu/moms-yt-downloader-server/download/"+ entityCommand.id() + ".mp3 " +
-            "/home/ubuntu/moms-yt-downloader-server/download/" + changeFilename + ".mp3";
+        String copyFileChangeNameCommand = "cp " +
+            "~/moms-yt-downloader-server/download/"+ entityCommand.id() + ".mp3 " +
+            "~/moms-yt-downloader-server/download/" + changeFilename + ".mp3";
         shellBashUtil.runtime(copyFileChangeNameCommand);
 
-        String deleteCommand = "sudo rm -f /home/ubuntu/moms-yt-downloader-server/download/" + entityCommand.id() + ".mp3";
+        String deleteCommand = "rm -f ~/moms-yt-downloader-server/download/" + entityCommand.id() + ".mp3";
         shellBashUtil.runtime(deleteCommand);
 
         File copiedFile = findFile(changeFilename);
         String uploadedUrl = uploadToS3(copiedFile);
 
-        String deleteCommand2 = "sudo rm -f /home/ubuntu/moms-yt-downloader-server/download/" + changeFilename + ".mp3";
+        String deleteCommand2 = "rm -f ~/moms-yt-downloader-server/download/" + changeFilename + ".mp3";
         shellBashUtil.runtime(deleteCommand2);
         return uploadedUrl;
     }
