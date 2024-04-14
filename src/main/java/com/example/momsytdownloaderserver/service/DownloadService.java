@@ -15,8 +15,7 @@ import java.io.File;
 public class DownloadService  {
 
     private final ShellBashUtil shellBashUtil;
-    private final String absolutePath = new File("").getAbsolutePath();
-    private String directory = absolutePath + "/download";
+    private String directory = "~/moms-yt-downloader-server/download";
     private FileUtil fileUtil;
     private final S3Config s3Config;
 
@@ -39,7 +38,7 @@ public class DownloadService  {
         shellBashUtil.runtime(initialCommandBuilder);
         String changeFilename = entityCommand.originalTitle();
         if(!entityCommand.requestedTitle().isBlank() && !entityCommand.requestedTitle().isEmpty()) changeFilename = entityCommand.requestedTitle();
-        String newTarget = directory + "/" + changeFilename + ".mp3";
+        String newTarget = "/download/" + changeFilename + ".mp3";
         File mp3File = findFile(entityCommand);
         File copiedFile = fileUtil.copyFile(mp3File, newTarget);
         mp3File.delete();
@@ -56,6 +55,8 @@ public class DownloadService  {
     }
 
     private File findFile(RequestEntityCommand entityCommand) {
+        String absolutePath = new File("").getAbsolutePath();
+        String directory = absolutePath + "/download";
         try {
             return new File(directory + "/" + entityCommand.id() + ".mp3");
         } catch (Exception e) {
