@@ -26,7 +26,7 @@ public class DownloadService  {
         this.fileUtil = fileUtil;
     }
 
-    public MultipartFile ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
+    public void ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
         String initialCommandBuilder = "yt-dlp " +
                 "-o "  + entityCommand.id() + ".mp3 " +
                 "-P " + directory + " " +
@@ -39,10 +39,10 @@ public class DownloadService  {
         String newTarget = "/download/" + changeFilename + ".mp3";
         File mp3File = findFile(entityCommand);
         File copiedFile = fileUtil.copyFile(mp3File, newTarget);
-        mp3File.delete();
+//        mp3File.delete();
         byte[] copiedFileByteArray = fileUtil.getByteArray(copiedFile);
-        copiedFile.delete();
-        return new CustomMultipartFile(copiedFileByteArray, copiedFile);
+//        copiedFile.delete();
+//        return new CustomMultipartFile(copiedFileByteArray, copiedFile);
     }
 
     private File findFile(RequestEntityCommand entityCommand) {
@@ -53,5 +53,18 @@ public class DownloadService  {
         } catch (Exception e) {
             throw new InternalErrorException(ErrorCode.INTERNAL);
         }
+    }
+
+    private void changeFileName(RequestEntityCommand entityCommand) {
+        String fileName = entityCommand.originalTitle();
+        if(entityCommand.requestedTitle().isEmpty() || entityCommand.requestedTitle().isBlank()) fileName = entityCommand.requestedTitle();
+        System.out.println("Copying ");
+        String changeNameCommand = "cp " +  directory + "/" + entityCommand.id() + ".mp3 " + directory + "/" + fileName + ".mp3";
+        shellBashUtil.runtime(changeNameCommand);
+    }
+
+    private void removePreviousFile(RequestEntityCommand entityCommand) {
+        String removeFileCommand = "rm -f " + directory + "/" + entityCommand.id() + ".mp3";
+        shellBashUtil.runtime(removeFileCommand);
     }
 }

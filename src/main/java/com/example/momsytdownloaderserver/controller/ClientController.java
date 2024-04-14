@@ -56,14 +56,15 @@ public class ClientController {
         return CommonResponse.success(searchService.search(query, pageToken), "조회 성공");
     }
 
-    @GetMapping(value = "/download", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public MultipartFile downloadVideo(
+    @GetMapping(value = "/download")
+    public CommonResult<String> downloadVideo(
         Authentication authentication,
         @RequestParam String videoId,
         @RequestParam String originalTitle,
         @RequestParam(required = false) String requestTitle
     ) {
         RequestEntityCommand entityCommand = requestService.saveRequest(originalTitle, requestTitle);
-        return downloadService.ytDownloadLogic(videoId, entityCommand);
+        downloadService.ytDownloadLogic(videoId, entityCommand);
+        return CommonResponse.success("저장 성공");
     }
 }
