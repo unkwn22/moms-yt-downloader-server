@@ -55,10 +55,11 @@ public class DownloadService  {
     }
 
     private File findFile(RequestEntityCommand entityCommand) {
-        String absolutePath = new File("").getAbsolutePath();
-        String directory = absolutePath + "/download";
+        String path = new File("").getAbsolutePath();
+        System.out.println(path);
+
         try {
-            return new File(directory + "/" + entityCommand.id() + ".mp3");
+            return new File(entityCommand.id() + ".mp3");
         } catch (Exception e) {
             throw new InternalErrorException(ErrorCode.INTERNAL);
         }
