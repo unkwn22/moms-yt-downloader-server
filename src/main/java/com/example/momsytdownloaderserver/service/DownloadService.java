@@ -30,7 +30,7 @@ public class DownloadService  {
     }
 
     public String ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
-        String initialCommandBuilder = "yt-dlp " +
+        String initialCommandBuilder = "sudo yt-dlp " +
             "-o "  + entityCommand.id() + ".mp3 " +
             "-P " + directory + " " +
             "-x --audio-format mp3 " +
