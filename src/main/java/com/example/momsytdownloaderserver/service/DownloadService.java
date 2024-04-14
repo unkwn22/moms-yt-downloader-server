@@ -38,12 +38,20 @@ public class DownloadService  {
         shellBashUtil.runtime(initialCommandBuilder);
         String changeFilename = entityCommand.originalTitle();
         if(!entityCommand.requestedTitle().isBlank() && !entityCommand.requestedTitle().isEmpty()) changeFilename = entityCommand.requestedTitle();
-        String newTarget = "/download/" + changeFilename + ".mp3";
-        File mp3File = findFile(entityCommand);
-        File copiedFile = fileUtil.copyFile(mp3File, newTarget);
-        mp3File.delete();
+
+        String copyFileChangeNameCommand = "sudo cp " +
+            directory + "/" + entityCommand.id() + ".mp3 " +
+            directory + "/" + changeFilename + ".mp3";
+        shellBashUtil.runtime(copyFileChangeNameCommand);
+
+        String deleteCommand = "sudo rm -f " + directory + "/" + entityCommand.id() + ".mp3";
+        shellBashUtil.runtime(deleteCommand);
+
+        File copiedFile = findFile(changeFilename);
         String uploadedUrl = uploadToS3(copiedFile);
-        copiedFile.delete();
+
+        String deleteCommand2 = "sudo rm -f " + directory + "/" + changeFilename + ".mp3";
+        shellBashUtil.runtime(deleteCommand2);
         return uploadedUrl;
     }
 
@@ -54,11 +62,9 @@ public class DownloadService  {
         return s3Config.getPrefixUrl() + directory;
     }
 
-    private File findFile(RequestEntityCommand entityCommand) {
-        String absolutePath = new File("").getAbsolutePath();
-        String directory = absolutePath + "/download";
+    private File findFile(String filename) {
         try {
-            return new File(directory + "/" + entityCommand.id() + ".mp3");
+            return new File(this.directory + "/" + filename + ".mp3");
         } catch (Exception e) {
             throw new InternalErrorException(ErrorCode.INTERNAL);
         }
