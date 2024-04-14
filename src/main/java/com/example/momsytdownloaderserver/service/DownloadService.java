@@ -48,7 +48,7 @@ public class DownloadService  {
     }
 
     private String uploadToS3(File file) {
-        String directory = s3Config.getDirectory() + "/" + file.getName();
+        String directory = s3Config.getDirectory() + file.getName();
         AmazonS3 amazonS3Client = s3Config.amazonS3Client();
         amazonS3Client.putObject(s3Config.getBucket(), directory, file);
         return s3Config.getPrefixUrl() + directory;

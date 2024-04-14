@@ -24,7 +24,7 @@ public class S3Config {
 
     private final String region = "ap-northeast-2";
 
-    private final String directory = "/mp3";
+    private final String directory = "mp3/";
 
     @Value("${URL}")
     private String prefixUrl;
