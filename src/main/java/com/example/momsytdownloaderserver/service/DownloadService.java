@@ -30,6 +30,7 @@ public class DownloadService  {
     }
 
     public String ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
+        System.out.println(new File("").getAbsolutePath());
         String initialCommandBuilder = "sudo yt-dlp " +
             "-o "  + entityCommand.id() + ".mp3 " +
             "-P " + directory + " " +
