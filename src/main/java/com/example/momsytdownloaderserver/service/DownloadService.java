@@ -10,6 +10,8 @@ import com.example.momsytdownloaderserver.util.ShellBashUtil;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DownloadService  {
@@ -31,12 +33,18 @@ public class DownloadService  {
 
     public String ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
         System.out.println(new File("").getAbsolutePath());
-        String initialCommandBuilder = "sudo yt-dlp " +
+
+        List<String> commands = new ArrayList<>();
+        String move = "cd /home/ubuntu/moms-yt-downloader-server";
+        String initialCommand = "sudo yt-dlp " +
             "-o "  + entityCommand.id() + ".mp3 " +
             "-P " + directory + " " +
             "-x --audio-format mp3 " +
             "https://www.youtube.com/watch?v=" + videoId;
-        shellBashUtil.runtime(initialCommandBuilder);
+        commands.add(move);
+        commands.add(initialCommand);
+        shellBashUtil.runtime(commands);
+
         String changeFilename = entityCommand.originalTitle();
         if(!entityCommand.requestedTitle().isBlank() && !entityCommand.requestedTitle().isEmpty()) changeFilename = entityCommand.requestedTitle();
 
