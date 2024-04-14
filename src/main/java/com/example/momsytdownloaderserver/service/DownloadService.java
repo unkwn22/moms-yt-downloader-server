@@ -30,7 +30,7 @@ public class DownloadService  {
     }
 
     public String ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
-        String initialCommandBuilder = "sudo yt-dlp " +
+        String initialCommandBuilder = "yt-dlp " +
             "-o "  + entityCommand.id() + ".mp3 " +
             "-P " + directory + " " +
             "-x --audio-format mp3 " +
@@ -38,20 +38,12 @@ public class DownloadService  {
         shellBashUtil.runtime(initialCommandBuilder);
         String changeFilename = entityCommand.originalTitle();
         if(!entityCommand.requestedTitle().isBlank() && !entityCommand.requestedTitle().isEmpty()) changeFilename = entityCommand.requestedTitle();
-
-        String copyFileChangeNameCommand = "sudo cp " +
-            directory + "/" + entityCommand.id() + ".mp3 " +
-            directory + "/" + changeFilename + ".mp3";
-        shellBashUtil.runtime(copyFileChangeNameCommand);
-
-        String deleteCommand = "sudo rm -f " + directory + "/" + entityCommand.id() + ".mp3";
-        shellBashUtil.runtime(deleteCommand);
-
-        File copiedFile = findFile(changeFilename);
+        String newTarget = "/download/" + changeFilename + ".mp3";
+        File mp3File = findFile(entityCommand);
+        File copiedFile = fileUtil.copyFile(mp3File, newTarget);
+        mp3File.delete();
         String uploadedUrl = uploadToS3(copiedFile);
-
-        String deleteCommand2 = "sudo rm -f " + directory + "/" + changeFilename + ".mp3";
-        shellBashUtil.runtime(deleteCommand2);
+        copiedFile.delete();
         return uploadedUrl;
     }
 
@@ -62,9 +54,11 @@ public class DownloadService  {
         return s3Config.getPrefixUrl() + directory;
     }
 
-    private File findFile(String filename) {
+    private File findFile(RequestEntityCommand entityCommand) {
+        String absolutePath = new File("").getAbsolutePath();
+        String directory = absolutePath + "/download";
         try {
-            return new File( directory + "/" + filename + ".mp3");
+            return new File(directory + "/" + entityCommand.id() + ".mp3");
         } catch (Exception e) {
             throw new InternalErrorException(ErrorCode.INTERNAL);
         }
