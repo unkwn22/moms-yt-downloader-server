@@ -5,7 +5,6 @@ import com.example.momsytdownloaderserver.config.S3Config;
 import com.example.momsytdownloaderserver.entity.RequestEntityCommand;
 import com.example.momsytdownloaderserver.exception.ErrorCode;
 import com.example.momsytdownloaderserver.exception.InternalErrorException;
-import com.example.momsytdownloaderserver.util.FileUtil;
 import com.example.momsytdownloaderserver.util.ShellBashUtil;
 import org.springframework.stereotype.Service;
 
@@ -16,21 +15,18 @@ public class DownloadService  {
 
     private final ShellBashUtil shellBashUtil;
     private String directory = "~/moms-yt-downloader-server/download";
-    private FileUtil fileUtil;
     private final S3Config s3Config;
 
     public DownloadService(
         ShellBashUtil shellBashUtil,
-        FileUtil fileUtil,
         S3Config s3Config
     ) {
         this.shellBashUtil = shellBashUtil;
-        this.fileUtil = fileUtil;
         this.s3Config = s3Config;
     }
 
     public String ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
-        String initialCommandBuilder = "yt-dlp " +
+        String initialCommandBuilder = "sudo yt-dlp " +
             "-o "  + entityCommand.id() + ".mp3 " +
             "-P " + directory + " " +
             "-x --audio-format mp3 " +
@@ -38,12 +34,20 @@ public class DownloadService  {
         shellBashUtil.runtime(initialCommandBuilder);
         String changeFilename = entityCommand.originalTitle();
         if(!entityCommand.requestedTitle().isBlank() && !entityCommand.requestedTitle().isEmpty()) changeFilename = entityCommand.requestedTitle();
-        String newTarget = "/download/" + changeFilename + ".mp3";
-        File mp3File = findFile(entityCommand);
-        File copiedFile = fileUtil.copyFile(mp3File, newTarget);
-        mp3File.delete();
+
+        String copyFileChangeNameCommand = "sudo cp " +
+            directory + "/" + entityCommand.id() + ".mp3 " +
+            directory + "/" + changeFilename + ".mp3";
+        shellBashUtil.runtime(copyFileChangeNameCommand);
+
+        String deleteCommand = "sudo rm -f " + directory + "/" + entityCommand.id() + ".mp3";
+        shellBashUtil.runtime(deleteCommand);
+
+        File copiedFile = findFile(changeFilename);
         String uploadedUrl = uploadToS3(copiedFile);
-        copiedFile.delete();
+
+        String deleteCommand2 = "sudo rm -f " + directory + "/" + changeFilename + ".mp3";
+        shellBashUtil.runtime(deleteCommand2);
         return uploadedUrl;
     }
 
@@ -54,11 +58,10 @@ public class DownloadService  {
         return s3Config.getPrefixUrl() + directory;
     }
 
-    private File findFile(RequestEntityCommand entityCommand) {
-        String absolutePath = new File("").getAbsolutePath();
-        String directory = absolutePath + "/download";
+    private File findFile(String filename) {
+        String newDirectory = "/home/ubuntu/moms-yt-downloader-server/download/" + filename + ".mp3";
         try {
-            return new File(directory + "/" + entityCommand.id() + ".mp3");
+            return new File(newDirectory);
         } catch (Exception e) {
             throw new InternalErrorException(ErrorCode.INTERNAL);
         }
