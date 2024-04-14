@@ -55,8 +55,6 @@ public class DownloadService  {
     }
 
     private File findFile(RequestEntityCommand entityCommand) {
-        String absolutePath = new File("").getAbsolutePath();
-        String directory = absolutePath + "/download";
         try {
             return new File(directory + "/" + entityCommand.id() + ".mp3");
         } catch (Exception e) {
