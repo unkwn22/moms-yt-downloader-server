@@ -14,7 +14,6 @@ import java.io.File;
 public class DownloadService  {
 
     private final ShellBashUtil shellBashUtil;
-    private String directory = "/ubuntu/home/moms-yt-downloader-server/download";
     private final S3Config s3Config;
 
     public DownloadService(
@@ -28,7 +27,7 @@ public class DownloadService  {
     public String ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
         String initialCommandBuilder = "sudo yt-dlp " +
             "-o "  + entityCommand.id() + ".mp3 " +
-            "-P " + directory + " " +
+            "-P ~/moms-yt-downloader-server/download" +
             "-x --audio-format mp3 " +
             "https://www.youtube.com/watch?v=" + videoId;
         shellBashUtil.runtime(initialCommandBuilder);
@@ -36,17 +35,17 @@ public class DownloadService  {
         if(!entityCommand.requestedTitle().isBlank() && !entityCommand.requestedTitle().isEmpty()) changeFilename = entityCommand.requestedTitle();
 
         String copyFileChangeNameCommand = "sudo cp " +
-            directory + "/" + entityCommand.id() + ".mp3 " +
-            directory + "/" + changeFilename + ".mp3";
+            "/home/ubuntu/moms-yt-downloader-server/download/"+ entityCommand.id() + ".mp3 " +
+            "/home/ubuntu/moms-yt-downloader-server/download/" + changeFilename + ".mp3";
         shellBashUtil.runtime(copyFileChangeNameCommand);
 
-        String deleteCommand = "sudo rm -f " + directory + "/" + entityCommand.id() + ".mp3";
+        String deleteCommand = "sudo rm -f /home/ubuntu/moms-yt-downloader-server/download/" + entityCommand.id() + ".mp3";
         shellBashUtil.runtime(deleteCommand);
 
         File copiedFile = findFile(changeFilename);
         String uploadedUrl = uploadToS3(copiedFile);
 
-        String deleteCommand2 = "sudo rm -f " + directory + "/" + changeFilename + ".mp3";
+        String deleteCommand2 = "sudo rm -f /home/ubuntu/moms-yt-downloader-server/download/" + changeFilename + ".mp3";
         shellBashUtil.runtime(deleteCommand2);
         return uploadedUrl;
     }
