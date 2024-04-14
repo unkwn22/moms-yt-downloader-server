@@ -33,7 +33,8 @@ public class ShellBashUtil {
             ProcessBuilder builder = new ProcessBuilder();
             builder.command("sh", "-c", command);
             Process process = builder.start();
-            System.out.println("Downloading Youtube Music");
+            StreamGobbler streamGobbler = new StreamGobbler(process.getInputStream(), System.out::println);
+            Executors.newSingleThreadExecutor().submit(streamGobbler);
             process.waitFor();
         } catch (IOException ioException) {
             // TODO
