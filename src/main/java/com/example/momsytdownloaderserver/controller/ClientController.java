@@ -11,6 +11,7 @@ import com.example.momsytdownloaderserver.service.RequestService;
 import com.example.momsytdownloaderserver.service.SearchService;
 import com.example.momsytdownloaderserver.service.UserService;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,7 +56,7 @@ public class ClientController {
         return CommonResponse.success(searchService.search(query, pageToken), "조회 성공");
     }
 
-    @GetMapping("/download")
+    @GetMapping(value = "/download", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public MultipartFile downloadVideo(
         Authentication authentication,
         @RequestParam String videoId,
