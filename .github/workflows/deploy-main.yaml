@@ -26,6 +26,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           command: |
             cd /home/ubuntu
+            sudo rm -f env.properties
             sudo echo "DDL_SET=${{secrets.DDL_SET}}" >> env.properties
             sudo echo "DEV_DB_URL=${{secrets.DEV_DB_URL}}" >> env.properties
             sudo echo "DEV_DB_USER=${{secrets.DEV_DB_USER}}" >> env.properties
