@@ -22,6 +22,18 @@ dependencies {
 
 	// Database
 	runtimeOnly("com.mysql:mysql-connector-j")
+
+	// Security
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+
+	// Gson
+	implementation("com.google.code.gson:gson:2.8.9")
+
+	// Feign
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.0.3")
+
+	// Amazon
+	implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
 }
 
 tasks.withType<Test> {
