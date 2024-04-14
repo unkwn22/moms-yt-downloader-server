@@ -20,9 +20,9 @@ public class DownloadService  {
     private final S3Config s3Config;
 
     public DownloadService(
-        ShellBashUtil shellBashUtil,
-        FileUtil fileUtil,
-        S3Config s3Config
+            ShellBashUtil shellBashUtil,
+            FileUtil fileUtil,
+            S3Config s3Config
     ) {
         this.shellBashUtil = shellBashUtil;
         this.fileUtil = fileUtil;
@@ -31,19 +31,29 @@ public class DownloadService  {
 
     public String ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
         String initialCommandBuilder = "sudo yt-dlp " +
-            "-o "  + entityCommand.id() + ".mp3 " +
-            "-P " + directory + " " +
-            "-x --audio-format mp3 " +
-            "https://www.youtube.com/watch?v=" + videoId;
+                "-o "  + entityCommand.id() + ".mp3 " +
+                "-P " + directory + " " +
+                "-x --audio-format mp3 " +
+                "https://www.youtube.com/watch?v=" + videoId;
         shellBashUtil.runtime(initialCommandBuilder);
         String changeFilename = entityCommand.originalTitle();
         if(!entityCommand.requestedTitle().isBlank() && !entityCommand.requestedTitle().isEmpty()) changeFilename = entityCommand.requestedTitle();
         String newTarget = "/download/" + changeFilename + ".mp3";
-        File mp3File = findFile(entityCommand);
-        File copiedFile = fileUtil.copyFile(mp3File, newTarget);
-        mp3File.delete();
+
+        String copyFileChangeNameCommand = "sudo cp " +
+                directory + "/" + entityCommand.id() + ".mp3 " +
+                directory + "/" + changeFilename + ".mp3";
+        shellBashUtil.runtime(copyFileChangeNameCommand);
+
+        String deleteCommand = "sudo rm -f " + directory + "/" + entityCommand.id() + ".mp3";
+        shellBashUtil.runtime(deleteCommand);
+
+        File copiedFile = findFile(changeFilename);
         String uploadedUrl = uploadToS3(copiedFile);
         copiedFile.delete();
+
+        String deleteCommand2 = "sudo rm -f " + directory + "/" + changeFilename + ".mp3";
+        shellBashUtil.runtime(deleteCommand2);
         return uploadedUrl;
     }
 
@@ -54,10 +64,11 @@ public class DownloadService  {
         return s3Config.getPrefixUrl() + directory;
     }
 
-    private File findFile(RequestEntityCommand entityCommand) {
-        String path = new File("").getAbsolutePath() + "/download/";
+    private File findFile(String filename) {
+        String path = new File("").getAbsolutePath() + "/download";
+
         try {
-            return new File(path + entityCommand.id() + ".mp3");
+            return new File(path + "/" + filename + ".mp3");
         } catch (Exception e) {
             throw new InternalErrorException(ErrorCode.INTERNAL);
         }
