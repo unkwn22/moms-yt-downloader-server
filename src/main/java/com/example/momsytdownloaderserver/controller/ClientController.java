@@ -56,7 +56,7 @@ public class ClientController {
         return CommonResponse.success(searchService.search(query, pageToken), "조회 성공");
     }
 
-    @GetMapping(value = "/download", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "/download", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     public MultipartFile downloadVideo(
         Authentication authentication,
         @RequestParam String videoId,
