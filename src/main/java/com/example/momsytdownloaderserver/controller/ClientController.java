@@ -63,6 +63,6 @@ public class ClientController {
         @RequestParam(required = false) String requestTitle
     ) {
         RequestEntityCommand entityCommand = requestService.saveRequest(originalTitle, requestTitle);
-        return CommonResponse.success(downloadService.ytDownloadLogic(videoId, entityCommand));
+        return CommonResponse.success(downloadService.ytDownloadLogic(videoId, entityCommand), "저장 성공");
     }
 }
