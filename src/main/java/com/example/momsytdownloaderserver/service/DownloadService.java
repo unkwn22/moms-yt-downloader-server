@@ -15,7 +15,7 @@ import java.io.File;
 public class DownloadService  {
 
     private final ShellBashUtil shellBashUtil;
-    private String directory = "~/moms-yt-downloader-server/download";
+    private String directory = "/home/ubuntu/moms-yt-downloader-server/download";
     private FileUtil fileUtil;
     private final S3Config s3Config;
 
@@ -64,7 +64,7 @@ public class DownloadService  {
 
     private File findFile(String filename) {
         try {
-            return new File( "/home/ubuntu/moms-yt-downloader-server/download" + filename + ".mp3");
+            return new File( directory + "/" + filename + ".mp3");
         } catch (Exception e) {
             throw new InternalErrorException(ErrorCode.INTERNAL);
         }
