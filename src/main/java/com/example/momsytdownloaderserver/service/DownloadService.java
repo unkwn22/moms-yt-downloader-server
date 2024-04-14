@@ -42,7 +42,7 @@ public class DownloadService  {
         mp3File.delete();
         byte[] copiedFileByteArray = fileUtil.getByteArray(copiedFile);
         copiedFile.delete();
-        return new CustomMultipartFile(copiedFileByteArray);
+        return new CustomMultipartFile(copiedFileByteArray, copiedFile);
     }
 
     private File findFile(RequestEntityCommand entityCommand) {
