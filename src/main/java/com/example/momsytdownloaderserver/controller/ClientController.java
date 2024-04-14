@@ -12,6 +12,7 @@ import com.example.momsytdownloaderserver.service.SearchService;
 import com.example.momsytdownloaderserver.service.UserService;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api")
@@ -55,13 +56,13 @@ public class ClientController {
     }
 
     @GetMapping("/download")
-    public void downloadVideo(
+    public MultipartFile downloadVideo(
         Authentication authentication,
         @RequestParam String videoId,
         @RequestParam String originalTitle,
         @RequestParam(required = false) String requestTitle
     ) {
         RequestEntityCommand entityCommand = requestService.saveRequest(originalTitle, requestTitle);
-        downloadService.ytDownloadLogic(videoId, entityCommand);
+        return downloadService.ytDownloadLogic(videoId, entityCommand);
     }
 }
