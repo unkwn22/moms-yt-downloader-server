@@ -14,11 +14,11 @@ public class DownloadService  {
     }
 
     public void ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
-        String initialCommandBuilder = "yt-dlp -x --audio-format mp3 " +
-            "-o " + "\"" + entityCommand.id() + ".mp3\" " +
-            "-p " + "\"/home/ubuntu/moms-yt-downloader-server/download\"" +
-            "https://www.youtube.com/watch?v=" +
-            videoId;
+        String initialCommandBuilder = "yt-dlp " +
+                "-o "  + entityCommand.id() + ".mp3 " +
+                "-P ~/moms-yt-downloader-server/download " +
+                "-x --audio-format mp3 " +
+                "https://www.youtube.com/watch?v=" + videoId;
         shellBashUtil.runtime(initialCommandBuilder);
     }
 
