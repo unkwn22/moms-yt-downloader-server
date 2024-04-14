@@ -14,7 +14,7 @@ import java.io.File;
 public class DownloadService  {
 
     private final ShellBashUtil shellBashUtil;
-    private String directory = "~/moms-yt-downloader-server/download";
+    private String directory = "/ubuntu/home/moms-yt-downloader-server/download";
     private final S3Config s3Config;
 
     public DownloadService(
