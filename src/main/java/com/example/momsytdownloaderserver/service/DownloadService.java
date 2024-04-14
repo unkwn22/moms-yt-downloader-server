@@ -15,7 +15,6 @@ import java.io.File;
 public class DownloadService  {
 
     private final ShellBashUtil shellBashUtil;
-    private final AmazonS3 amazonS3Client;
     private String directory = "~/moms-yt-downloader-server/download";
     private FileUtil fileUtil;
     private final S3Config s3Config;
@@ -23,12 +22,11 @@ public class DownloadService  {
     public DownloadService(
         ShellBashUtil shellBashUtil,
         FileUtil fileUtil,
-        S3Config s3Config,
-        AmazonS3 amazonS3Client) {
+        S3Config s3Config
+    ) {
         this.shellBashUtil = shellBashUtil;
         this.fileUtil = fileUtil;
         this.s3Config = s3Config;
-        this.amazonS3Client = amazonS3Client;
     }
 
     public String ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
@@ -51,6 +49,7 @@ public class DownloadService  {
 
     private String uploadToS3(File file) {
         String directory = s3Config.getDirectory() + "/" + file.getName() + ".mp3";
+        AmazonS3 amazonS3Client = s3Config.amazonS3Client();
         amazonS3Client.putObject(s3Config.getBucket(), directory, file);
         return s3Config.getPrefixUrl() + directory;
     }
