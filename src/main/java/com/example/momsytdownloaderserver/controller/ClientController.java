@@ -56,13 +56,13 @@ public class ClientController {
     }
 
     @GetMapping("/download")
-    public MultipartFile downloadVideo(
+    public CommonResult<String> downloadVideo(
         Authentication authentication,
         @RequestParam String videoId,
         @RequestParam String originalTitle,
         @RequestParam(required = false) String requestTitle
     ) {
         RequestEntityCommand entityCommand = requestService.saveRequest(originalTitle, requestTitle);
-        return downloadService.ytDownloadLogic(videoId, entityCommand);
+        return CommonResponse.success(downloadService.ytDownloadLogic(videoId, entityCommand));
     }
 }

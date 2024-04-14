@@ -26,7 +26,7 @@ public class DownloadService  {
         this.fileUtil = fileUtil;
     }
 
-    public MultipartFile ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
+    public String ytDownloadLogic(String videoId, RequestEntityCommand entityCommand) {
         String initialCommandBuilder = "yt-dlp " +
                 "-o "  + entityCommand.id() + ".mp3 " +
                 "-P " + directory + " " +
@@ -42,7 +42,8 @@ public class DownloadService  {
         mp3File.delete();
         byte[] copiedFileByteArray = fileUtil.getByteArray(copiedFile);
         copiedFile.delete();
-        return new CustomMultipartFile(copiedFileByteArray);
+        // TODO
+        return "";
     }
 
     private File findFile(RequestEntityCommand entityCommand) {
