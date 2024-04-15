@@ -12,6 +12,8 @@ public class RegisterDto {
         this.name = name;
     }
 
+    public RegisterDto() {}
+
     public String getUsername() {
         return username;
     }
