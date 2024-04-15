@@ -27,7 +27,7 @@ public class UserService {
 
     @Transactional
     public void registerUserLogic(RegisterDto dto) {
-        Optional<User> searchedUser = userInteraction.findUserByUserNameAndName(dto.getUsername(), dto.getName());
+        Optional<User> searchedUser = userInteraction.findByUserName(dto.getUsername());
         if(searchedUser.isPresent()) throw new BadRequestException(ErrorCode.EXISTS);
         User beforeRegisterUserEntity = new User(dto.getName(), dto.getUsername(), dto.getPassword());
         userInteraction.saveUser(beforeRegisterUserEntity);
