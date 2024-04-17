@@ -17,7 +17,9 @@ public class RequestService {
 
     @Transactional
     public RequestEntityCommand saveRequest(String originalTitle) {
-        Request request = new Request(originalTitle, null);
+        System.out.println(originalTitle);
+        String parseOriginalTitle = originalTitle.replaceAll(" ", "-");
+        Request request = new Request(parseOriginalTitle, null);
         Request savedRequest = requestInteraction.saveRequest(request);
         return constructRequestEntityCommand(savedRequest);
     }
