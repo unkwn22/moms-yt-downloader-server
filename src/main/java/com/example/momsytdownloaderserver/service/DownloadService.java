@@ -37,6 +37,7 @@ public class DownloadService  {
                 "https://www.youtube.com/watch?v=" + videoId;
         shellBashUtil.runtime(initialCommandBuilder);
         String changeFilename = entityCommand.originalTitle();
+        System.out.println(">>>>>>>>> " + changeFilename);
 
         String copyFileChangeNameCommand = "sudo cp " +
             directory + "/" + entityCommand.id() + ".mp3 " +
