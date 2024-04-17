@@ -37,12 +37,10 @@ public class DownloadService  {
                 "https://www.youtube.com/watch?v=" + videoId;
         shellBashUtil.runtime(initialCommandBuilder);
         String changeFilename = entityCommand.originalTitle();
-        if(!entityCommand.requestedTitle().isBlank() && !entityCommand.requestedTitle().isEmpty()) changeFilename = entityCommand.requestedTitle();
-        String newTarget = "/download/" + changeFilename + ".mp3";
 
         String copyFileChangeNameCommand = "sudo cp " +
-                directory + "/" + entityCommand.id() + ".mp3 " +
-                directory + "/" + changeFilename + ".mp3";
+            directory + "/" + entityCommand.id() + ".mp3 " +
+            directory + "/" + changeFilename + ".mp3";
         shellBashUtil.runtime(copyFileChangeNameCommand);
 
         String deleteCommand = "sudo rm -f " + directory + "/" + entityCommand.id() + ".mp3";
@@ -50,7 +48,6 @@ public class DownloadService  {
 
         File copiedFile = findFile(changeFilename);
         String uploadedUrl = uploadToS3(copiedFile);
-        copiedFile.delete();
 
         String deleteCommand2 = "sudo rm -f " + directory + "/" + changeFilename + ".mp3";
         shellBashUtil.runtime(deleteCommand2);
