@@ -3,13 +3,13 @@ package com.example.momsytdownloaderserver.controller;
 import com.example.momsytdownloaderserver.dto.LoginDto;
 import com.example.momsytdownloaderserver.dto.RegisterDto;
 import com.example.momsytdownloaderserver.entity.RequestEntityCommand;
-import com.example.momsytdownloaderserver.exception.CommonResponse;
-import com.example.momsytdownloaderserver.exception.CommonResult;
+import com.example.momsytdownloaderserver.exception.*;
 import com.example.momsytdownloaderserver.repository.YouTubeSearchResponse;
 import com.example.momsytdownloaderserver.service.DownloadService;
 import com.example.momsytdownloaderserver.service.RequestService;
 import com.example.momsytdownloaderserver.service.SearchService;
 import com.example.momsytdownloaderserver.service.UserService;
+import org.apache.coyote.BadRequestException;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,6 +60,7 @@ public class ClientController {
         @RequestParam String videoId,
         @RequestParam String originalTitle
     ) {
+        if(originalTitle == null || originalTitle.isEmpty() || originalTitle.isBlank()) throw new InternalErrorException(ErrorCode.INTERNAL);
         RequestEntityCommand entityCommand = requestService.saveRequest(originalTitle);
         return CommonResponse.success(downloadService.ytDownloadLogic(videoId, entityCommand), "저장 성공");
     }
