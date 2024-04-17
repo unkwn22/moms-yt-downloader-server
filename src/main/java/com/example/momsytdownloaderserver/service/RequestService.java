@@ -18,8 +18,9 @@ public class RequestService {
     @Transactional
     public RequestEntityCommand saveRequest(String originalTitle) {
         System.out.println(originalTitle);
-        String parseOriginalTitle = originalTitle.replaceAll(" ", "-");
-        Request request = new Request(parseOriginalTitle, null);
+        String parseOriginalTitle = originalTitle.replaceAll("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]", "-");
+        String secondParsedTitle = parseOriginalTitle.replaceAll("[,.]", "");
+        Request request = new Request(secondParsedTitle, null);
         Request savedRequest = requestInteraction.saveRequest(request);
         return constructRequestEntityCommand(savedRequest);
     }
