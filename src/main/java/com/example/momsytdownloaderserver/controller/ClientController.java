@@ -9,6 +9,7 @@ import com.example.momsytdownloaderserver.service.DownloadService;
 import com.example.momsytdownloaderserver.service.RequestService;
 import com.example.momsytdownloaderserver.service.SearchService;
 import com.example.momsytdownloaderserver.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.coyote.BadRequestException;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -63,5 +64,15 @@ public class ClientController {
         if(originalTitle == null || originalTitle.isEmpty() || originalTitle.isBlank()) throw new InternalErrorException(ErrorCode.INTERNAL);
         RequestEntityCommand entityCommand = requestService.saveRequest(originalTitle);
         return CommonResponse.success(downloadService.ytDownloadLogic(videoId, entityCommand), "저장 성공");
+    }
+
+    @GetMapping("/ttl")
+    public CommonResult<String> ttlRequest(HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
+        String forwardedFor = request.getHeader("X-Forwarded-For");
+        if (forwardedFor != null && !forwardedFor.isEmpty()) {
+            ipAddress = forwardedFor.split(",")[0].trim();
+        }
+        return CommonResponse.success("request from:" + ipAddress);
     }
 }
