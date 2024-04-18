@@ -33,7 +33,7 @@ public class JwtTokenGenerator {
             .type("JWT")
             .build();
         JwtClaimsSet claims = JwtClaimsSet.builder()
-            .expiresAt(Instant.now().plus(365L, ChronoUnit.DAYS))
+            .expiresAt(Instant.now().plus(30L, ChronoUnit.MINUTES))
             .subject(user.getUsername())
             .claim("username", user.getUsername())
             .build();
